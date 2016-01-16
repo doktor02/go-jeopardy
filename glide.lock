@@ -1,0 +1,14 @@
+hash: 222ec4c703848ca9dfd2bdc8b9c1e0278c70ca0ab55fbc4a32e467cdd77b88d1
+updated: 2016-01-16T17:16:18.808644299-05:00
+imports:
+- name: github.com/codegangsta/cli
+  version: c31a7975863e7810c92e2e288a9ab074f9a88f29
+- name: github.com/Sirupsen/logrus
+  version: 446d1c146faa8ed3f4218f056fcd165f6bcfda81
+- name: gopkg.in/airbrake/gobrake.v2
+  version: c9d51adc624b5cc4c1bf8de730a09af4878ffe2d
+  repo: https://gopkg.in/airbrake/gobrake.v2
+- name: gopkg.in/gemnasium/logrus-airbrake-hook.v2
+  version: 31e6fd4bd5a98d8ee7673d24bc54ec73c31810dd
+  repo: https://gopkg.in/gemnasium/logrus-airbrake-hook.v2
+devImports: []
