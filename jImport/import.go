@@ -2,12 +2,15 @@ package jImport
 
 import (
 	"encoding/csv"
-	"fmt"
+	"errors"
 	"github.com/Sirupsen/logrus"
+	"gopkg.in/olivere/elastic.v3"
 	"os"
 )
 
 var log = logrus.New()
+
+const jeopardyIndex = "jeopardy"
 
 // RunImport executes the jeopardy question import
 //   - downloads from such and such
@@ -28,19 +31,31 @@ func RunImport(args []string) error {
 
 	defer csvFile.Close()
 
-	reader := csv.NewReader(csvFile)
+	_ = csv.NewReader(csvFile)
 
-	record, err := reader.Read()
+	client, err := elastic.NewClient(
+		elastic.SetURL("http://elasticsearch:9200"),
+		elastic.SetSniff(false),
+	)
 	if err != nil {
 		return err
 	}
-	fmt.Print(record)
 
-	anotherRecord, err := reader.Read()
+	exists, err := client.IndexExists(jeopardyIndex).Do()
 	if err != nil {
 		return err
 	}
-	fmt.Print(anotherRecord)
+	if !exists {
+		createIndex, err := client.CreateIndex(jeopardyIndex).Do()
+		if err != nil {
+			return err
+		}
+		if !createIndex.Acknowledged {
+			return errors.New("Unacknowledged on index creation")
+		}
+	}
+
+	log.Info("Csv and Elasticsearch ready")
 
 	return nil
 }

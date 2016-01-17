@@ -2,3 +2,4 @@ package: .
 import:
 - package: github.com/codegangsta/cli
 - package: github.com/Sirupsen/logrus
+- package: gopkg.in/olivere/elastic.v3
