@@ -3,6 +3,7 @@ package jImport
 import (
 	"encoding/csv"
 	"errors"
+	"fmt"
 	"github.com/Sirupsen/logrus"
 	"gopkg.in/olivere/elastic.v3"
 	"os"
@@ -31,7 +32,7 @@ func RunImport(args []string) error {
 
 	defer csvFile.Close()
 
-	_ = csv.NewReader(csvFile)
+	reader := csv.NewReader(csvFile)
 
 	client, err := elastic.NewClient(
 		elastic.SetURL("http://elasticsearch:9200"),
@@ -54,6 +55,20 @@ func RunImport(args []string) error {
 			return errors.New("Unacknowledged on index creation")
 		}
 	}
+
+	records, err := reader.ReadAll()
+	if err != nil {
+		return err
+	}
+
+	bulk := client.NewBulkService()
+
+	// for _, rec := range records {
+	// 	fmt.Print(rec)
+	//  bulk.Add(
+	// }
+
+	bulk.Do()
 
 	log.Info("Csv and Elasticsearch ready")
 
